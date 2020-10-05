@@ -1,0 +1,16 @@
+{
+  "name": "vault-frontend",
+  "version": "0.0.1",
+  "description": "Frontend for vault",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react",
+    "redux",
+    "frontend"
+  ],
+  "author": "Sajal N. Shrestha",
+  "license": "ISC"
+}

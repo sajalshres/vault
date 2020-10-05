@@ -1,0 +1,42 @@
+{
+  "name": "vault-backend",
+  "version": "0.0.1",
+  "description": "Backend for vault api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "vault",
+    "express",
+    "javascript",
+    "docker",
+    "backend"
+  ],
+  "author": "Sajal N. Shrestha",
+  "license": "ISC",
+  "dependencies": {
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.2",
+    "dotenv-safe": "^8.2.0",
+    "express": "^4.17.1",
+    "express-validation": "^3.0.6",
+    "helmet": "^4.1.1",
+    "http-status": "^1.4.2",
+    "joi": "^17.2.1",
+    "lodash": "^4.17.20",
+    "mongoose": "^5.10.7",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.4.13",
+    "pm2": "^4.5.0",
+    "uuid": "^8.3.1",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^8.1.3",
+    "nodemon": "^2.0.4",
+    "sinon": "^9.1.0"
+  }
+}
