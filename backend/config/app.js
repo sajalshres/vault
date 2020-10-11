@@ -3,7 +3,9 @@ const morgan = require('morgan');
 const compress = require('compression');
 const cors = require('cors');
 const helmet = require('helmet');
+const routes = require('../api/routes/v1');
 const { logs } = require('./variables');
+const error = require('../api/middlewares/error');
 
 const app = express();
 
@@ -22,5 +24,17 @@ app.use(helmet());
 
 // enable CORS
 app.use(cors());
+
+// mount routes
+app.use('/v1', routes);
+
+// if error not an instanceOf APIError, convert it.
+app.use(error.converter);
+
+// catch 404 and forward to error handler
+app.use(error.notFound);
+
+// error handler, send stacktace only in development
+app.use(error.handler);
 
 module.exports = app;
