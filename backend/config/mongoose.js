@@ -18,7 +18,7 @@ exports.connect = () => {
       useUnifiedTopology: true,
       useFindAndModify: false,
     })
-    .then(() => console.log('mondgoDB connected...'));
+    .then(() => logger.info('mondgoDB connected...'));
 
   return mongoose.connection;
 };
