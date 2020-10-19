@@ -3,8 +3,10 @@ const morgan = require('morgan');
 const compress = require('compression');
 const cors = require('cors');
 const helmet = require('helmet');
+const passport = require('passport');
 const routes = require('../api/routes/v1');
 const { logs } = require('./variables');
+const strategies = require('./passport');
 const error = require('../api/middlewares/error');
 
 const app = express();
@@ -24,6 +26,10 @@ app.use(helmet());
 
 // enable CORS
 app.use(cors());
+
+// enable authentication
+app.use(passport.initialize());
+passport.use('jwt', strategies.jwt);
 
 // mount routes
 app.use('/api/v1', routes);

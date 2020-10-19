@@ -3,7 +3,7 @@ const httpStatus = require('http-status');
 const { omitBy, isNil, get } = require('lodash');
 const bcrypt = require('bcryptjs');
 const jwt = require('jwt-simple');
-const uuidv4 = require('uuid/v4');
+const { v4: uuidv4 } = require('uuid');
 const moment = require('moment-timezone');
 const APIError = require('../utils/apiError');
 const {
@@ -11,8 +11,6 @@ const {
   jwtSecret,
   jwtExpirationInterval,
 } = require('../../config/variables');
-const APIError = require('../utils/apiError');
-const APIError = require('../utils/apiError');
 
 const roles = ['user', 'admin'];
 
