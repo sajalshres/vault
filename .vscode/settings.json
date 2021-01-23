@@ -2,5 +2,8 @@
     "[javascript]": {
         "editor.formatOnSave": true,
     },
-    "prettier.singleQuote": true
+    "[json]": {
+        "editor.formatOnSave": true
+    },
+    "prettier.singleQuote": true,
 }

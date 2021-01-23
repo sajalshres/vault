@@ -6,11 +6,7 @@ const jwt = require('jwt-simple');
 const { v4: uuidv4 } = require('uuid');
 const moment = require('moment-timezone');
 const APIError = require('../utils/apiError');
-const {
-  env,
-  jwtSecret,
-  jwtExpirationInterval,
-} = require('../../config/variables');
+const { env, jwtSecret, jwtExpirationInterval } = require('../../config/variables');
 
 const roles = ['user', 'admin'];
 
@@ -134,8 +130,7 @@ userSchema.statics = {
   async findAndGenerateToken(options) {
     const { email, password, refreshObject } = options;
 
-    if (!email)
-      throw new APIError({ message: 'Email is required to generate a token' });
+    if (!email) throw new APIError({ message: 'Email is required to generate a token' });
 
     const user = await this.findOne({ email }).exec();
     const err = {
@@ -181,7 +176,7 @@ userSchema.statics = {
    * @param {Error} error
    * @returns {Error|APIError}
    */
-  checkDublicateEmail(error) {
+  checkDuplicateEmail(error) {
     if (error.name === 'MongoError' && error.code === 11000) {
       return new APIError({
         message: 'Validation Error',
