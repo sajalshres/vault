@@ -1,11 +1,9 @@
 const express = require('express');
 const { validate } = require('express-validation');
-const { valid } = require('joi');
 const controller = require('../../controllers/auth.controller');
 const {
   login,
   register,
-  oAuth,
   refresh,
   sendPasswordReset,
   passwordReset,

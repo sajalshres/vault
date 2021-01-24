@@ -23,6 +23,8 @@ const passwordResetTokenSchema = new mongoose.Schema({
   },
 });
 
+const PasswordResetToken = mongoose.model('PasswordResetToken', passwordResetTokenSchema);
+
 passwordResetTokenSchema.statics = {
   async generate(user) {
     const userId = user._id;
@@ -40,5 +42,4 @@ passwordResetTokenSchema.statics = {
   },
 };
 
-const PasswordResetToken = mongoose.model('PasswordResetToken', passwordResetTokenSchema);
 module.exports = PasswordResetToken;

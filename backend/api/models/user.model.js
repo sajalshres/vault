@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const httpStatus = require('http-status');
-const { omitBy, isNil, get } = require('lodash');
+const { omitBy, isNil } = require('lodash');
 const bcrypt = require('bcryptjs');
 const jwt = require('jwt-simple');
 const { v4: uuidv4 } = require('uuid');
@@ -105,21 +105,17 @@ userSchema.statics = {
   roles,
 
   async get(id) {
-    try {
-      let user;
-      if (mongoose.Types.ObjectId.isValid(id)) {
-        user = await this.findById(id).exec();
-      }
-
-      if (user) return user;
-
-      throw new APIError({
-        message: `User with id ${id} does not exist`,
-        status: httpStatus.NOT_FOUND,
-      });
-    } catch (error) {
-      throw error;
+    let user;
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      user = await this.findById(id).exec();
     }
+
+    if (user) return user;
+
+    throw new APIError({
+      message: `User with id ${id} does not exist`,
+      status: httpStatus.NOT_FOUND,
+    });
   },
 
   /**
@@ -197,7 +193,7 @@ userSchema.statics = {
 
   async oAuthLogin({ service, id, email, name, picture }) {
     const user = await this.findOne({
-      $or: [{ [`services.${services}`]: id }, { email }],
+      $or: [{ [`services.${service}`]: id }, { email }],
     });
 
     if (user) {
