@@ -1,7 +1,8 @@
 const httpStatus = require('http-status');
 const passport = require('passport');
+const { Promise } = require('bluebird');
 const User = require('../models/user.model');
-const APIError = require('../utils/APIError');
+const APIError = require('../utils/apiError');
 
 const ADMIN = 'admin';
 const LOGGED_USER = '_loggedUser';
@@ -45,9 +46,5 @@ exports.ADMIN = ADMIN;
 exports.LOGGED_USER = LOGGED_USER;
 
 exports.authorize = (roles = User.roles) => (req, res, next) => {
-  passport.authenticate(
-    'jwt',
-    { session: false },
-    handleJWT(req, res, next, roles)
-  )(req, res, next);
+  passport.authenticate('jwt', { session: false }, handleJWT(req, res, next, roles))(req, res, next);
 };
