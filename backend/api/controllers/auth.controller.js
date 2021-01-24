@@ -1,10 +1,12 @@
 const httpStatus = require('http-status');
+const moment = require('moment-timezone');
+const { omit } = require('lodash');
 const User = require('../models/user.model');
 const RefreshToken = require('../models/refreshToken.model');
-const moment = require('moment-timezone');
 const { jwtExpirationInterval } = require('../../config/variables');
-const { omit } = require('lodash');
 const APIError = require('../utils/apiError');
+const PasswordResetToken = require('../models/passwordResetToken.model');
+const emailProvider = require('../services/emails/emailProvider');
 
 /**
  * Generates a object with tokens
@@ -84,6 +86,67 @@ exports.refresh = async (req, res, next) => {
     });
     const response = generateTokenResponse(user, accessToken);
     return res.json(response);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+/**
+ * Send password reset
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
+exports.sendPasswordReset = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email }).exec();
+
+    if (user) {
+      const passwordResetObj = await PasswordResetToken.generate(user);
+      emailProvider.sendPasswordReset(passwordResetObj);
+      res.status(httpStatus.OK);
+      return res.json('success');
+    }
+    throw new APIError({
+      status: httpStatus.UNAUTHORIZED,
+      message: 'No account found with that email',
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+/**
+ * Reset password for a valid user
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
+exports.resetPassword = async (req, res, next) => {
+  try {
+    const { email, password, resetToken } = req.body;
+    const resetTokenObject = await PasswordResetToken.findOneAndRemove({
+      userEmail: email,
+      resetToken,
+    });
+
+    const err = {
+      status: httpStatus.UNAUTHORIZED,
+      isPublic: true,
+    };
+
+    if (!resetTokenObject) {
+      err.message = 'Cannot find matching reset token';
+      throw new APIError(err);
+    }
+
+    const user = await User.findOne({ email: resetTokenObject.userEmail }).exec();
+    user.password = password;
+    await user.save();
+    emailProvider.sendPasswordChangeEmail(user);
+    res.status(httpStatus.OK);
+    return res.json('Password Updated');
   } catch (error) {
     return next(error);
   }
